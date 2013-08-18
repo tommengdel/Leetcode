@@ -5,24 +5,34 @@ public:
         // DO NOT write int main() function
         if(*s == 0) {
             if(*p == 0) return true;
-            else if(*p == '*') {
-                return isMatch(s, p + 1);
-            }
+            else if(*p == '*') return isMatch(s, p + 1);
             else return false;
-        }
+        }   
         
-        if(*p == '?') return isMatch(s + 1, p + 1);
+        if(*p == '?') {
+            return isMatch(s + 1, p + 1);
+        }
         else if(*p == '*') {
-            bool matchone = false;
+            char *pnext = const_cast<char*>(p);
+            int countp = 0, counts = 0;
+            for(char *t = pnext; *t != 0; t = t + 1) 
+                if(*t != '*') countp++;
+                
+            counts = strlen(s);
+            
+            while(*pnext == '*') pnext = pnext + 1;
             char *iter = const_cast<char*>(s);
-            while(*iter != 0 && !matchone) {
-                if(isMatch(iter, p + 1)) matchone = true;
+            bool matchone = false;
+            while(*iter != 0 && !matchone && counts >= countp) {
+                if(isMatch(iter, pnext)) matchone = true;
                 iter = iter + 1;
+                counts--;
             }
-            if(isMatch(iter, p + 1)) matchone = true;
+            
+            if(isMatch(iter, pnext)) matchone = true;
             return matchone;
         }
-        else return (*s == *p) && isMatch(s + 1, p + 1);
+        else return *s == *p && isMatch(s + 1, p + 1);
     }
 };
-//Time Limit Exceeded
+//使用了优化
