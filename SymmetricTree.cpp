@@ -12,7 +12,7 @@ public:
     bool isSymmetric(TreeNode *root) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        
+        if(root == 0) return true; //I forget this
         return isSymmetric(root->left, root->right);
     }
     bool isSymmetric(TreeNode *tree1, TreeNode *tree2) {
