@@ -30,12 +30,12 @@ public:
     int ret = 0;
     if(A[midA] > B[midB]) {
         if(k > midA + midB + 1)
-            ret = GetKth(A + midA, m - midA, B + midB + 1, n - midB - 1, k - midA - midB - 1);  
+            ret = GetKth(A , m , B + midB + 1, n - midB - 1, k - midB - 1); //Make a serious mistake!!  
         else ret = GetKth(A, midA, B, n, k);
     }
     else {
         if(k > midA + midB + 1) 
-            ret = GetKth(A + midA + 1, m - midA - 1, B + midB, n - midB, k - midA - midB - 1);
+            ret = GetKth(A + midA + 1, m - midA - 1, B , n, k - midA  - 1);
         else ret = GetKth(A, m, B, midB, k);
     }
     return ret;
