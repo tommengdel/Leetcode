@@ -1,3 +1,7 @@
+#include<iostream>
+#include<map>
+#include<string>
+using namespace std;
 class Solution {
     typedef map<char, int>::iterator MapIt;
     bool includes(map<char, int>&s, map<char, int> &t) {
@@ -35,10 +39,13 @@ public:
             char slidechar = S[window_start];
             
             --schCount[S[window_start]];//important
-            do { 
-                ++window_start;
-                ++schCount[S[window_start]];
-            } while(tchCount.find(S[window_start]) == tchCount.end());
+	    //This will incur a cross-boundary access
+	    
+	    while(++window_start < S.size()) {
+	    	++schCount[S[window_start]];
+		if(tchCount.find(S[window_start]) != tchCount.end()) break; 
+	    }
+            
             
             //This stat is important
             if(includes(schCount, tchCount)) continue;
@@ -54,3 +61,9 @@ public:
     }
 };
 
+int main() {
+	string S = "cabwefgewcwaefgcf", T = "cae";
+	Solution().minWindow(S, T);
+}
+
+//逻辑有点乱，代码打印出来看。
