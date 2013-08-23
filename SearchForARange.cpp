@@ -19,11 +19,9 @@ public:
             else low = mid + 1;
         }
         
-        if(A[high] < target) rightInd = -1;
-        else rightInd = A[high] == target ? high : high - 1;
-        cout<<"Right Index: "<<rightInd<<":"<<A[rightInd]<<endl; 
+	rightInd = A[high] == target ? high : high - 1;
+	if(rightInd != -1 && A[rightInd] != target) rightInd = -1;
 	
-        if(A[rightInd] != target) rightInd = -1;
         
         low = 0; high = rightInd;
         while(low < high) {
@@ -44,3 +42,5 @@ int main() {
 	int target = 4;
 	Solution().searchRange(A, 3, target);
 }
+//The original code will incur a cross-boundary access to Array A[], A[-1] point to target. Althought it can pass the OJ, it is also incorrect.
+
