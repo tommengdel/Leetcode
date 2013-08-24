@@ -15,8 +15,8 @@ public:
             switch(A[i]) {
                 case 0:
                     ++zero;
-                    if(zero == i) ++i;
-		    else swap(A[zero], A[i]);
+		    ++i;
+		    swap(A[zero], A[i]);
                     
                     break;
                 case 1:
