@@ -32,7 +32,7 @@ public:
             rightEnd = intervals[i].end;
             
             j = i + 1;
-            while(overlap(intervals[j], intervals[j - 1])) { 
+	    while(j < intervals.size() && overlap(intervals[j], Interval(leftEnd, rightEnd))) { 
                 if(intervals[j].end > rightEnd) rightEnd = intervals[j].end;
                 ++j;
             }
