@@ -1,70 +1,36 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
-#include<iterator>
-using namespace std;
 class Solution {
-    
+    inline int MAX(int a, int b) { return a > b ? a : b; }
 public:
     int maxArea(vector<int> &height) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        if(height.size() < 2) return 0;
-        int max = 0;
-        
-        class Elem {
-	public:
-            int height, index;
-            Elem(int h = 0, int ind = 0) : height(h), index(ind) {}
-            bool operator<(const Elem& e1)const {
-                return height < e1.height;
+        vector<int> index(height.size());
+        for(int i = 0; i < height.size(); i++) index[i] = i;
+         
+        struct cmp {
+            vector<int> & v;
+            cmp(vector<int> &v): v(v) {}
+            bool operator() (const int & ind1, const int &ind2) {
+                return v[ind1] < v[ind2];
             }
         };
-        
-        class gen {
-            vector<int> &v;
+        sort(index.begin(), index.end(), cmp(height));
+        vector<int> maxInd(height.size()), minInd(height.size());
+        int max = 0, min = height.size() - 1;
+        for(int i = height.size() - 1; i >= 0; --i) {
+            if(index[i] > max) max = index[i];
+            if(index[i] < min) min = index[i];
             
-            int cur;
-        public:
-            gen(vector<int> &v) :v(v), cur(0) {}
-            Elem operator()(){
-                Elem ret(v[cur], cur);
-                ++cur;
-                return ret;
-            }
-        };
-        
-        vector<Elem> heightIndex;
-        generate_n(back_inserter(heightIndex), height.size(), gen(height));
-        sort(heightIndex.begin(), heightIndex.end());      
-        
-        vector<bool> containerVisited;
-        containerVisited.assign(height.size(), false);
-        int left = 0, right = height.size() -1;
-        
-        //可以使用for_each
-        for(int i = 0; i < heightIndex.size(); ++i) {
-            Elem &e = heightIndex[i];
-            containerVisited[e.index] = true;        
-            
-            //Start to get the max container
-            int con1 = e.height * (e.index - left);
-            int con2 = e.height * (right - e.index);
-            
-            max = max > con1 ? max : con1;
-            max = max > con2 ? max : con2;
-            //Advance left and right
-            while(containerVisited[left] == true) ++left;
-            while(containerVisited[right] == true) --right;
+            maxInd[i] = max;
+            minInd[i] = min;
         }
-        return max;
+        int maxCon = 0;
+        for(int i = 0; i < height.size() - 1; ++i) {
+           int curMax = MAX(abs(index[i] - minInd[i + 1]), abs(maxInd[i + 1] - index[i])) * height[index[i]];
+           maxCon = maxCon ? curMax : maxCon : curMax; 
+        }
+        return maxCon;
     }
-    
-};
-int main() {
-	int a[] = {1, 1};
-	vector<int> height(a, a + 2);
-	Solution().maxArea(height);
-}
+ };
 
-//Not accepted , I am not familiar with the algorithm in STL!! 
+//Accepted
