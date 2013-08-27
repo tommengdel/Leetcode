@@ -1,7 +1,3 @@
-#include<iostream>
-#include<numeric>
-using namespace std;
-
 class Solution {
     bool InRange(int v , int below, int above) { return v >= below && v <= above; }
 public:
@@ -12,7 +8,7 @@ public:
 	int t = x;
 	while(t != 0) {
 	  int d = t % 10;
-	  if(!InRange(rx, (numeric_limits<int>::min() - d) / 10, (numeric_limits<int>::max() - d) / 10)) return false;//"min delete d" is a big mistake 
+	  if(!InRange(rx, (numeric_limits<int>::min()) / 10 - d / 10, (numeric_limits<int>::max() - d) / 10)) return false;
 	  rx = rx * 10 + d;
 	  t = t / 10;
 	  //min<= rx * 10 + t % 10 <= max
