@@ -26,15 +26,16 @@ public:
         
         //Find the max length of true seq
         int i = 0; int maxLength = 0;
-        while(i < Match.size()) {
+	while(i < Match.size()) {
             if(!Match[i]) {  //This is important
                 ++i; continue;
             }
             int j = i;
-            while(Match[j]) ++j;
-            if(j - i + 1 > maxLength) maxLength = j - i + 1;
+            while(j < Match.size() && Match[j]) ++j; 
+            if(j - i > maxLength) maxLength = j - i;
             i = j + 1;
         }
+       
 	/*
 	 * This code can be changed
 	 * while(i < Match.size() {
@@ -45,7 +46,7 @@ public:
 	 * }
 	 
 	 * */
-           
+        return maxLength;   
     }
 };
-
+//My Mistake: Cross-boundary Access; Count number error
