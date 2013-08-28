@@ -17,7 +17,7 @@ public:
         
     }
 };
-
+//Accepted
 int main() {
 	int a[] = {1, 0, 101, numeric_limits<int>::min(), numeric_limits<int>::max()}
 	cout<<Test(1);

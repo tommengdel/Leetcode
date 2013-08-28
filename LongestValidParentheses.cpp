@@ -50,3 +50,40 @@ public:
     }
 };
 //My Mistake: Cross-boundary Access; Count number error
+//I Find a new Method , but it is Not Correct
+/*
+class Solution {
+    int MIN(int a, int b) {
+        return a < b ? a : b;
+    }
+public:
+    int longestValidParentheses(string s) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        int leftPar = 0, rightPar = 0;
+        int max = 0;
+        for(int i = 0; i < s.size(); ++i) {
+            switch(s[i]) {
+            case '(':
+                leftPar++;
+                break;
+            case ')':
+                if(leftPar <= rightPar) {
+                     max = max > leftPar ? max : leftPar;
+                     leftPar = rightPar = 0;
+
+                }
+                else ++rightPar;
+                break;
+            }
+        }
+        
+        int curMax = MIN(leftPar, rightPar);
+        max = max > curMax ? max : curMax;
+        return max * 2; //Forget to multiply by 2
+     }
+};
+*/
+//Test Case: ()(()  Output: 4 Expected: 2
+//
+
