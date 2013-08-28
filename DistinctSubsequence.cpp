@@ -63,12 +63,12 @@ int main() {
 	Test(S, T);
 }
 
-//Dynamic Programming Solution
-//
-class SolutionDP {
-	int numDistinct(string S, string T) {
+class Solution {
+    public:
+     int numDistinct(string S, string T) {
         // Start typing your Java solution below
         // DO NOT write main() function
+        if(S.size() == 0) return T.size() == 0 ? 1 :0;
         vector<int> temp(T.size(), -1);
         vector<vector<int> > dp(S.size(), temp);
         
@@ -78,7 +78,9 @@ class SolutionDP {
     }
     
     int ComputeDistinctSubseq(string &S, string &T, int i, int j, vector<vector<int> >&dp) {
-        if(i < 0 || j < 0) return 0;
+        
+        if(j < 0) return 1;
+        if(i < 0) return 0;
         if(dp[i][j] != -1) return dp[i][j];
         else {
         
@@ -91,7 +93,7 @@ class SolutionDP {
         }
     
     }
-}
+};
 
 
 
