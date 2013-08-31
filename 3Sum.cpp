@@ -22,7 +22,7 @@ public:
             int ind1, ind2 ;
             index(int ind1,int ind2) :ind1(ind1),ind2(ind2) {}
             bool operator<(const struct index& i2)const {
-                return ind1 < i2.ind1; 
+                return ind1 < i2.ind1 || (ind1 == i2.ind1 && ind2 < i2.ind2);
             }
         };
         set<index> isDup;
@@ -46,4 +46,7 @@ public:
         return ret;
     }
 };
-
+//A error about stl::set usage
+//You must accurately define the operator < 
+//Because set define (a == b) as (!(a < b) && !(b < a)) 
+//I make a big mistake
