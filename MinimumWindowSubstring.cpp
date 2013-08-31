@@ -1,14 +1,9 @@
-#include<iostream>
-#include<map>
-#include<string>
-using namespace std;
 class Solution {
-    typedef map<char, int>::iterator MapIt;
-    bool includes(map<char, int>&s, map<char, int> &t) {
-        for(MapIt iter = t.begin(); iter != t.end(); ++iter) {
-            MapIt tmp = s.find(iter->first);
-            if(tmp == s.end() ||tmp->second < iter->second)
-                return false;
+    bool includes(map<char, int> Par, map<char, int> Child) {
+        map<char, int>::iterator iter;
+        for(iter = Child.begin(); iter != Child.end(); iter++) {
+            map<char, int>::iterator pariter = Par.find(iter->first);
+            if(pariter == Par.end() || pariter->second < iter->second) return false;
         }
         return true;
     }
@@ -16,54 +11,64 @@ public:
     string minWindow(string S, string T) {
         // Start typing your C/C++ solution below
         // DO NOT write int main() function
-        map<char, int> schCount, tchCount;
-        if(T.size() == 0) return "";
-        for(int i = 0; i < T.size(); ++i) ++tchCount[T[i]];
+        map<char, int> s_char_count, t_char_count;
+        if(S.size() < T.size() || T.size() == 0) return "";
+        string ret;
         int window_start, window_end;
-        for(window_start = 0, window_end = 0; window_end < S.size(); ++window_end) {
-            if(tchCount.find(S[window_end]) != tchCount.end()){
-                ++schCount[S[window_end]];
-                if(includes(schCount, tchCount)) break;
+        window_start = 0;
+        window_end = 0;
+        
+        //Initialization
+        for(int i = 0; i < T.size(); ++i) t_char_count[T[i]]++;
+	for(int i = 0; i < S.size(); ++i) 
+		if(window_start < S.size() && t_char_count[S[window_start]] == t_char_count.end()) window_start++;
+		else break;
+        //Compute the window_end
+	window_end = window_start;
+        while(window_end < S.size()) {
+            if(t_char_count.find(S[window_end]) != t_char_count.end()) {
+                s_char_count[S[window_end]]++;
+                if(includes(s_char_count, t_char_count)) break;
             }
+            ++window_end;
         }
         
-        if(window_end == S.size()) return ""; 
-        //Start slide
-        string ret = S.substr(window_start, window_end - window_start + 1);
-        
-        while(window_end < S.size()) {
-            //Slide the window start
-            if(ret.size() > window_start - window_end + 1) 
-             ret = S.substr(window_start, window_end - window_start + 1);
+        if(window_end == S.size()) return ""; //S not include T
+	
+	while(includes(s_char_count, t_char_count)) {
+		s_char_count[S[window_start]]--;
+		window_start++;
+	}        
+	window_start--;
+	s_char_count[S[window_start]]++;
 
-            char slidechar = S[window_start];
-            
-            --schCount[S[window_start]];//important
-	    //This will incur a cross-boundary access
-	    
-	    while(++window_start < S.size()) {
-	    	++schCount[S[window_start]];
-		if(tchCount.find(S[window_start]) != tchCount.end()) break; 
-	    }
-            
-            
-            //This stat is important
-            if(includes(schCount, tchCount)) continue;
-            
-            //Slide the window end
-            ++window_end;
-            for(; window_end < S.size(); ++window_end) {
-                ++schCount[S[window_end]];
-                if(S[window_end] == slidechar) break; 
+        ret = S.substr(window_start, window_end - window_start + 1);
+        //Start to Slide
+        while(window_end < S.size()) {
+            if(ret.size() > window_end - window_start + 1) 
+                ret = S.substr(window_start, window_end - window_start + 1);
+
+            char delchar = S[window_start];;
+            s_char_count[S[window_start++]]--;
+            while(window_start < S.size() && t_char_count.find(S[window_start]) == t_char_count.end()) window_start++; //Just clear useless char
+
+            while(includes(s_char_count, t_char_count)) {
+//		while(window_start < S.size() && t_char_count.find(S[window_start]) == t_char_count.end()) window_start++;
+		
+                s_char_count[S[window_start]]--;
+                delchar = S[window_start]; //此处错误
+                ++window_start;
             }
+            while(window_start < S.size() && t_char_count.find(S[window_start]) == t_char_count.end()) window_start++; //clear useless char to decrese the length
+              
+            //Slide window_end
+            while(++window_end < S.size() && S[window_end] != delchar) s_char_count[S[window_end]]++;            
         }
         return ret;
     }
 };
-
-int main() {
-	string S = "cabwefgewcwaefgcf", T = "cae";
-	Solution().minWindow(S, T);
-}
-
-//逻辑有点乱，代码打印出来看。
+//not accpeted
+//逻辑还是不够清楚
+//bba ba 返回错误 逻辑还是不太清晰
+//
+//Error Test Case:"acbbaca", "aba"	"acbba"	"baca" 
