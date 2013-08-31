@@ -1,7 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
-using namespace std;
 class Solution {
     int binary_search(vector<int> &num, int low, int high, int target) {
         int mid;
@@ -21,35 +17,33 @@ public:
         // DO NOT write int main() function
         vector<vector<int> > ret;
         if(num.size() < 3) return ret;
+        struct index
+        { 
+            int ind1, ind2 ;
+            index(int ind1,int ind2) :ind1(ind1),ind2(ind2) {}
+            bool operator<(const struct index& i2)const {
+                return ind1 < i2.ind1; 
+            }
+        };
+        set<index> isDup;
+        isDup.clear();
         sort(num.begin(), num.end());
-        int prevTwoSum;
-        bool Init = false;
+        //int prevTwoSum;
+        //bool Init = false;
         for(int i = 0; i < num.size() - 2; ++i) 
-            for(int j = i + 1; j < num.size() - 1; ++j) {
-                if(!Init) {
-			Init = true;
-			prevTwoSum = num[i] + num[j];
-		}
-                else {
-                    if(prevTwoSum == num[i] + num[j]) continue;
-		    
-                    
-                }
-                int k =  binary_search(num, j + 1, num.size(), 0 - num[i] - num[j]);
+            for(int j = i + 1; j < num.size() - 1; ++j) {  
+                if(isDup.find(index(num[i], num[j])) != isDup.end()) continue;
+                int k =  binary_search(num, j + 1, num.size() -1 , 0 - num[i] - num[j]);
                 if(k != -1) {
                     ret.push_back(vector<int>());
                     ret.back().push_back(num[i]);
                     ret.back().push_back(num[j]);
                     ret.back().push_back(num[k]);
+                    isDup.insert(index(num[i], num[j]));
                 }
-                prevTwoSum = num[i] + num[j];
+          //      prevTwoSum = num[i] + num[j];
             }
         return ret;
     }
 };
 
-int main() {
-	int a[] = {0,0, 0, 0};
-	vector<int> num(a, a + 4);
-	Solution().threeSum(num);
-}
