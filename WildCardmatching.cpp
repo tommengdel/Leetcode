@@ -1,6 +1,6 @@
 class Solution {
        class Index {
-       		public:
+           	public:
 			int pos_s, pos_t;
 			Index(int i1, int i2): pos_s(i1), pos_t(i2) {}
 			bool operator<(const Index& i2) const {
@@ -46,7 +46,7 @@ public:
             return matchRes[Index(pos_s, pos_t)] = ret;
         }
         
-        if(pos_t == p.size()) return matchRes[Index(pos_s, pos_t)] = false;
+        if(pos_t >= p.size()) return matchRes[Index(pos_s, pos_t)] = false;
         bool ret = false;
         switch(p[pos_t]) {
             case '?':
@@ -54,23 +54,40 @@ public:
                 break;
             case '*':
                 //Count the Question Mark
+                {
                 int countQMark = 0, NextPos_t;
                 for(NextPos_t = pos_t + 1; NextPos_t < p.size(); ++NextPos_t) {
                     if(p[NextPos_t] == '?') countQMark++;
                     else break;
                 }
+                
+                
+                
                 //if One match
-                for(int NextPos_s = pos_s + countQMark; NextPos_s < s.size(); ++NextPos_s) {
-                    if((NextPos_t >= p.size() && s[NextPos_s] == p[NextPos_t])  //Fix Bug1: aa '*' Beautiful
+                
+                
+                for(int NextPos_s = pos_s + countQMark; NextPos_s <= s.size(); ++NextPos_s) { //Fix Bug2 
+                    if(isMatch(s, NextPos_s, p, NextPos_t, matchRes)) {
+                        ret = true;
+                        break;
+                    }
+                    /*
+                    if((NextPos_t >= p.size() || s[NextPos_s] == p[NextPos_t]) 
                         && isMatch(s, NextPos_s + 1, p, NextPos_t + 1, matchRes)) {
                             ret = true;
                             break;
                         }
+                        */
                 }
                 
+        
+                
+                
+                }
                 break;
             default:
-                ret = s[pos_s] == p[pos_t] && isMatch(s, pos_s + 1, p, pos_t + 1, matchRes);
+                ret = (s[pos_s] == p[pos_t]) && isMatch(s, pos_s + 1, p, pos_t + 1, matchRes);
+                break;
         }
         matchRes[Index(pos_s, pos_t)] = ret;
         return ret;
@@ -78,3 +95,5 @@ public:
     }
 };
 
+//STILL Time Limit Exceed
+//"bababababbabbaabbbbabbbaaaaabbabbbbabaaabbbabbbaabaaaaaaaabbbbaaabababbbabababbbabbabbbbaabbbbabbaabbbabaaababaabbbaaaaaababaaabaaaabbbababbbbaaabbabbbbabaabaabaabbbbbbbaaababbbaaabbbbabbbbbabaabbbaaabbaa", "*b******b*bb*ba*a*baa****ab**aa*b**bab*bab****b*b**bbbbab**b**aab*bb*a*abb**aa*b*b*******baaaaab*b***"
