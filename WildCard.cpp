@@ -35,4 +35,4 @@ public:
         else return *s == *p && isMatch(s + 1, p + 1);
     }
 };
-//使用了优化
+//使用了优化  
