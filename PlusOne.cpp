@@ -57,3 +57,27 @@ int main() {
 //Not Test
 //
 //So important
+//
+//Below is Accepted at Leetcode.com
+class Solution {
+public:
+    vector<int> plusOne(vector<int> &digits) {
+        // Start typing your C/C++ solution below
+        // DO NOT write int main() function
+        digits[digits.size() -1]  += 1;
+        for(int i = digits.size() - 1; i > 0; --i) 
+            if(digits[i] >= 10) {
+                digits[i -1] += 1;
+                digits[i] -= 10;
+            }
+        vector<int> ret;
+        if(digits[0] >= 10) {
+            digits[0] -= 10;
+            ret.push_back(1);
+            copy(digits.begin(), digits.end(), back_inserter(ret));
+            return ret;
+        }else return digits;
+        
+    }
+};
+
